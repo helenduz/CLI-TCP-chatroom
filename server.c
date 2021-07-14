@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#define MAX_CLIENTS 2
+#define MAX_CLIENTS 3
 #define NAME_SIZE 40
 #define BUFFER_SIZE 2048
 #define SERVER_PORT 6666
@@ -196,7 +196,11 @@ int main(int argc, char **argv){
             send(client_socket, max_error, strlen(max_error), 0);
             printf("%s", max_error);
             printf("Rejected client: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-            close(client_socket);
+            sleep(5);
+            if (close(client_socket) < 0){
+                perror("Error occured when closing socket for rejected client");
+            }
+            printf("Closed rejected client socket");
             continue;       
         }
         else{

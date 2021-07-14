@@ -62,6 +62,9 @@ void *handle_recv(){
             // directly exit the program if server is closed
             printf("Quitting program now");
             sleep(5); // wait for send() to print out error to notify user 
+            if (close(sock) < 0){
+                perror("Error occured when closing socket");
+            }
             exit(1);  
         }
         printf("%s", buffer_recv);
@@ -98,7 +101,9 @@ int main(int argc, char **argv){
     printf("%s\n", init_buffer);
     if (init_buffer[0] == 'M'){
         printf("Quitting program now\n");
-        sleep(5);
+        if (close(sock) < 0){
+        perror("Error occured when closing socket");
+        }
         return EXIT_SUCCESS;
     }
 
@@ -136,6 +141,6 @@ int main(int argc, char **argv){
     }
     if (close(sock) < 0){
         perror("Error occured when closing socket");
-    } // probably not needed since "quit" will cause server side to initiate close()
+    } 
     return EXIT_SUCCESS;
 }
