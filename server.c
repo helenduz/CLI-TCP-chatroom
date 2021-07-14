@@ -200,7 +200,7 @@ int main(int argc, char **argv){
             if (close(client_socket) < 0){
                 perror("Error occured when closing socket for rejected client");
             }
-            printf("Closed rejected client socket");
+            pthread_mutex_unlock(&client_mutex);
             continue;       
         }
         else{

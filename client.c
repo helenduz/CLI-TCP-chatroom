@@ -53,19 +53,18 @@ void *handle_recv(){
     while (1){
         int receive = recv(sock, buffer_recv, BUFFER_SIZE, 0);
         if (receive < 0){
-            sleep(10);
+            sleep(5);
             perror("Error occured when receiving message from server");
             continue;
         }
         else if (receive == 0){
             perror("Server side has initiated a shutdown, all messages received");
             // directly exit the program if server is closed
-            printf("Quitting program now");
-            sleep(5); // wait for send() to print out error to notify user 
+            printf("Quitting program now\n");
             if (close(sock) < 0){
                 perror("Error occured when closing socket");
             }
-            exit(1);  
+            exit(0);  
         }
         printf("%s", buffer_recv);
         bzero(buffer_recv, BUFFER_SIZE); 
@@ -102,7 +101,7 @@ int main(int argc, char **argv){
     if (init_buffer[0] == 'M'){
         printf("Quitting program now\n");
         if (close(sock) < 0){
-        perror("Error occured when closing socket");
+            perror("Error occured when closing socket");
         }
         return EXIT_SUCCESS;
     }
