@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#define MAX_CLIENTS 3
+#define MAX_CLIENTS 2
 #define NAME_SIZE 40
 #define BUFFER_SIZE 2048
 #define SERVER_PORT 6666
