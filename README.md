@@ -8,8 +8,8 @@ A simple command-line chatroom implemented with socket programming in C. Multipl
 
 
 ## What's next
-1. Let the server program take two arguments: the maximum client, and the port number to host this service. 
-2. Provide a list of online users when a new user logs in.
-3. Private (client-to-client) messaging. 
-4. Make the chat history available for download on both the client and server side. 
-5. Implement a chatroom administrator on the server side. 
+- [ ] Let the server program take in two arguments: the maximum client, and the port number to host this service. 
+- [ ] Provide a list of online users when a new user logs in.
+- [ ] Private (client-to-client) messaging. 
+- [ ] Make the chat history available for download on both the client and server side. 
+- [ ] Implement a chatroom administrator on the server side. 
