@@ -1,14 +1,11 @@
-# the compiler: gcc for C program, define as g++ for C++
 CC = gcc
+CFLAGS = -Wall -g3 -fsanitize=address -pthread
+PROGS =	client server
 
-# compiler flags:
-CFLAGS  = -Wall -g3 -fsanitize=address -pthread
+all:	$(PROGS)
 
-all:
-	client server
+%:	%.c
+	$(CC) $(CFLAGS) $@.c -o $@
 
-client: client.c
-	$(CC) $(CFLAGS) client.c -o client
-
-server: server.c
-	$(CC) $(CFLAGS) server.c -o server
+clean:
+	rm -f $(PROGS) $(TEMPFILES) *.o

@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#define MAX_CLIENTS 3
+#define MAX_CLIENTS 5
 #define NAME_SIZE 40
 #define BUFFER_SIZE 2048
 #define SERVER_PORT 6666
@@ -26,7 +26,7 @@ client_t *client_list[MAX_CLIENTS];
 struct sockaddr_in server_addr; // socketaddr_in stores information about an IP socket
 int server_socket; // file descriptor, from socket()
 static volatile int client_count;
-pthread_mutex_t client_mutex = PTHREAD_MUTEX_INITIALIZER; // separate dequeque & enqueue & ensure_max
+pthread_mutex_t client_mutex = PTHREAD_MUTEX_INITIALIZER; // separate rm_client & add_client & ensure_max
 
 
 /* returns a file descriptor for a listening socket to be used by server */
@@ -72,7 +72,7 @@ int get_listen_socket(){
 /* adds a new (pointer to) client struct into the client_list 
 *  due to the multi-thread approach, no guarantee that clients will be added in order
 */
-void enqueue(client_t *new_client_struct){
+void add_client(client_t *new_client_struct){
     pthread_mutex_lock(&client_mutex);
     for(int i = 0; i < MAX_CLIENTS; i++){
 		if (!client_list[i]){ // note: global variables automatically initialized to zero
@@ -85,8 +85,8 @@ void enqueue(client_t *new_client_struct){
 }
 
 
-/* adds a new (pointer to) client struct into the client_list */
-void dequeque(int client_id){
+/* removes a new (pointer to) client struct into the client_list */
+void rm_client(int client_id){
 	pthread_mutex_lock(&client_mutex);
 	for(int i = 0; i < MAX_CLIENTS; i++){
 		if (client_list[i]){
@@ -164,7 +164,7 @@ void *handle_one_client(void *arg){
     }
 
     close(cur_client->client_socket);
-    dequeque(cur_client->client_id);
+    rm_client(cur_client->client_id);
     free(cur_client);
     pthread_exit(0);
 }
@@ -205,7 +205,7 @@ int main(int argc, char **argv){
         }
         else{
             char conn_success[96];
-            sprintf(conn_success, "-------Chat Room Connection Successful. Type quit to exit--------\n");
+            sprintf(conn_success, "-------Chat Room Connection Successful. Type quit to leave--------\n");
             send(client_socket, conn_success, strlen(conn_success), 0);
         }
         pthread_mutex_unlock(&client_mutex);
@@ -219,7 +219,7 @@ int main(int argc, char **argv){
 		new_client_struct->client_id = client_id++;
 
 		/* Add client to the queue and create thread */
-		enqueue(new_client_struct);
+		add_client(new_client_struct);
 		if (pthread_create(&tid, NULL, &handle_one_client, (void *) new_client_struct) != 0){
             perror("Error occured when creating client thread\n");
         }   

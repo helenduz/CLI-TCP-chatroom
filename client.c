@@ -95,7 +95,7 @@ int main(int argc, char **argv){
 
     // check if max client is reached
     char init_buffer[BUFFER_SIZE];
-    recv(sock, init_buffer, BUFFER_SIZE, 0);
+    recv(sock, init_buffer, BUFFER_SIZE, 0); // receives the welcome message or max client message
     init_buffer[strcspn(init_buffer, "\n")] = '\0';
     printf("%s\n", init_buffer);
     if (init_buffer[0] == 'M'){
@@ -127,13 +127,8 @@ int main(int argc, char **argv){
             perror("Error occured when creating receiving thread");
     }  
 
-    // // exit when exit_flag is set
-    // while (1){
-    //     if (exit_flag = 1){
-    //         close(sock);
-    //         return EXIT_SUCCESS;
-    //     }
-    // }
+    // wait for send thread to terminate (i.e. when user types "quit")
+    /* to do: recv thread should also be able to start termination of program */
     void *status;
     if (pthread_join(send_tid, &status) != 0){
         perror("Error occured during pthread_join() for handle_send");
