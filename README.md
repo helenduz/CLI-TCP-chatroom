@@ -1,5 +1,5 @@
 # CLI-TCP-chatroom
-A simple command-line chatroom implemented with socket programming in C. Multiple clients can send messages to the group. 
+A simple command-line chatroom implemented with socket programming in C. Multiple clients can send messages to the group. This is a personal project I did while I was self-studying Computer Networks.
 
 ## How to Run the Program 
 1. Compile the files with `make`. If you need to compile the files separately, then use `make client` or `make server`.
